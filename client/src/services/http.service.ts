@@ -14,10 +14,9 @@ const getCountries = async (
     errorCallback(!response.ok);
   }
 
-  const parsedResponse = await response.json();
-  console.log("parsedResponse", parsedResponse);
+  const parsedResponse = (await response.json()) as ICountry[];
 
-  return [];
+  return parsedResponse;
 };
 
 export { getCountries };
