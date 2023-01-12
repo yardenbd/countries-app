@@ -2,8 +2,13 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
+  margin-bottom: auto;
   .table {
     border: 1px solid #eeeeee;
+  }
+  .table-content {
+    overflow-y: auto;
+    max-height: 80vh;
   }
 `;
 

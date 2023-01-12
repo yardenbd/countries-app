@@ -32,4 +32,10 @@ export const FormWrapper = styled.form`
       padding: 8px 16px;
     }
   }
+  .input-field {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+  }
 `;

@@ -7,11 +7,13 @@ import { Container, RowContainer, TableHeader, TableRow } from "./style";
 interface ITableProps {
   setCountryToEdit: React.Dispatch<React.SetStateAction<ICountry | null>>;
   countries: ICountry[];
+  deleteCountry: (id: number) => void;
 }
 
 export const Table: React.FC<ITableProps> = ({
   countries,
   setCountryToEdit,
+  deleteCountry,
 }): JSX.Element => {
   const tableHeaders = Object.keys(countries[0] || {});
   tableHeaders.push("action");
@@ -21,14 +23,14 @@ export const Table: React.FC<ITableProps> = ({
     </RowContainer>
   ));
   const tableRowsToRender = countries.map((country) => (
-    <TableRow key={country.code}>
+    <TableRow key={country.id}>
       {tableHeaders.map((th) => {
         const content = country[th as keyof typeof country];
         return (
           <RowContainer key={th}>
             <DynamicElement
               onEdit={() => setCountryToEdit(country)}
-              onDelete={() => {}}
+              onDelete={() => deleteCountry(country.id)}
               tableHeader={th}
               content={content}
             />
