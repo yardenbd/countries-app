@@ -3,7 +3,9 @@ import { UpdateCountryDto } from './dto/update-country.dto';
 import { Country } from './country.entity';
 import { COUNTRY_REPOSITORY } from '../../core/constants';
 import { IPagination } from 'src/types';
+import { Op, Sequelize } from 'sequelize';
 
+const attributes = ['id', 'name', 'code', 'flag', 'longitude', 'latitude'];
 @Injectable()
 export class CountryService {
   constructor(
@@ -11,9 +13,26 @@ export class CountryService {
     private readonly countryRepository: typeof Country,
   ) {}
 
-  findAll(pagination: IPagination): Promise<Country[]> {
+  findAll(pagination: IPagination) {
     const { limit = 10, offset = 0 } = pagination;
-    return this.countryRepository.findAll<Country>({ limit: 10, offset: 5 });
+    return this.countryRepository.findAndCountAll<Country>({
+      limit,
+      offset,
+      attributes,
+    });
+  }
+
+  async findBy(pagination: IPagination, countryName: string) {
+    const { limit = 10, offset = 0 } = pagination;
+
+    return this.countryRepository.findAndCountAll<Country>({
+      limit,
+      offset,
+      attributes,
+      where: {
+        name: { [Op.startsWith]: countryName },
+      },
+    });
   }
 
   update(UpdateCountryDto: UpdateCountryDto) {

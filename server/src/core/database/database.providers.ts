@@ -18,7 +18,6 @@ export const databaseProviders = [
         database: process.env.DB_NAME,
       });
       sequelize.addModels([Country]);
-      await sequelize.sync();
       return sequelize;
     },
   },

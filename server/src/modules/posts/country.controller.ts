@@ -17,11 +17,18 @@ export class PostsController {
 
   @Get()
   findAll(@Query() query: IPagination) {
-    console.log('in the controller');
     const { limit, offset } = query;
     return this.countryService.findAll({ limit: +limit, offset: +offset });
   }
 
+  @Get('/:name')
+  findBy(@Query() query: IPagination, @Param() param: { name: string }) {
+    const { limit, offset } = query;
+    return this.countryService.findBy(
+      { limit: +limit, offset: +offset },
+      param.name,
+    );
+  }
   @Patch()
   update(@Req() requset: CustomRequest<UpdateCountryDto>) {
     const { body } = requset;
