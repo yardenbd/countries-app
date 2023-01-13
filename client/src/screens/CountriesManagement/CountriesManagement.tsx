@@ -4,11 +4,13 @@ import { Filter } from "../../components/Filter/Filter";
 import { Pagination } from "../../components/Pagintaion/Pagination";
 import { Table } from "../../components/Table/Table";
 import { useCountries } from "../../hooks/useCountries";
-import { ICountry, IPaginationState } from "../../types";
+import { ICountry, IPaginationState, SortBy } from "../../types";
 import { Container } from "./style";
 
 export const CountriesManagement: React.FC = (): JSX.Element => {
   const [countryToEdit, setCountryToEdit] = useState<ICountry | null>(null);
+  const [sortBy, setSortBy] = useState<SortBy>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [pagination, setPagination] = useState<IPaginationState>({
     limit: 15,
     offset: 0,
@@ -34,7 +36,7 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
   };
 
   const getAllCountries = () => {
-    getCountries(pagination).then((count) =>
+    getCountries(pagination, sortBy).then((count) =>
       setPagination((prevState) => {
         return { ...prevState, total: count };
       })
@@ -50,10 +52,11 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
     resetPagination(count);
   };
 
-  const handleSearchCountry = async (filterName: string) => {
+  const handleSearchCountry = async () => {
     const count = await getCountriesByName(
       { limit: 15, offset: 0 },
-      filterName
+      searchTerm,
+      sortBy
     );
     resetPagination(count);
   };
@@ -71,19 +74,31 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
     />
   );
 
-  useEffect(getAllCountries, []);
+  useEffect(() => {
+    if (searchTerm) {
+      handleSearchCountry();
+      return;
+    }
+    getAllCountries();
+  }, [sortBy]);
 
   return (
     <Container>
-      <Filter onReset={handleReset} onClick={handleSearchCountry} />
+      <Filter
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        onReset={handleReset}
+        onClick={handleSearchCountry}
+      />
       <Table
+        setSortBy={setSortBy}
         deleteCountry={handleDeleteCountry}
         countries={countries}
         setCountryToEdit={setCountryToEdit}
       />
       {renderEditForm}
       <Pagination
-        onPageClick={(pagination) => getCountries(pagination)}
+        onPageClick={(pagination) => getCountries(pagination, sortBy)}
         setPagination={setPagination}
         pagination={pagination}
       />

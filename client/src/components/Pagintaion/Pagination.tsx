@@ -36,15 +36,24 @@ export const Pagination: React.FC<IPaginationProps> = ({
     onPageClick({ limit, offset: lastPageIndex ? offset - 25 : offset });
   };
 
-  const paginationItemToRender = paginationRange?.map((page) => (
-    <PagintionItem
-      onClick={() => handlePageClick(+page - 1)}
-      className={pageIndex === +page - 1 ? "active" : ""}
-      key={page}
-    >
-      {page}
-    </PagintionItem>
-  ));
+  const paginationItemToRender = paginationRange?.map((page) => {
+    if (typeof page === "string") {
+      return (
+        <PagintionItem key={"id" + Math.random().toString(16).slice(2)}>
+          {page}
+        </PagintionItem>
+      );
+    } else
+      return (
+        <PagintionItem
+          onClick={() => handlePageClick(page - 1)}
+          className={pageIndex === page - 1 ? "active" : ""}
+          key={page}
+        >
+          {page}
+        </PagintionItem>
+      );
+  });
   paginationItemToRender?.unshift(
     <PagintionItem
       onClick={() => handlePageClick(pagination.pageIndex - 1)}

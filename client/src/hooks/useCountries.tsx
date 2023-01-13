@@ -1,23 +1,29 @@
-import { ICountry, IPagination } from "../types";
+import { ICountry, IPagination, SortBy } from "../types";
 import { useState } from "react";
 import * as countryService from "../services/http.service";
 export const useCountries = () => {
   const [countries, setCountries] = useState<ICountry[]>([]);
   const [error, setError] = useState<boolean>(false);
 
-  const getCountries = async (pagination: IPagination) => {
-    const response = await countryService.getCountries(pagination, setError);
+  const getCountries = async (pagination: IPagination, sortBy?: SortBy) => {
+    const response = await countryService.getCountries(
+      pagination,
+      setError,
+      sortBy || []
+    );
     setCountries(response.rows);
     return response.count;
   };
   const getCountriesByName = async (
     pagination: IPagination,
-    filterName: string
+    filterName: string,
+    sortBy?: SortBy
   ) => {
     const response = await countryService.getCountriesByName(
       pagination,
       filterName,
-      setError
+      setError,
+      sortBy || []
     );
     setCountries(response.rows);
     return response.count;
@@ -29,6 +35,7 @@ export const useCountries = () => {
   const updateCountry = async (countryToUpdate: Partial<ICountry>) => {
     await countryService.updateCountry(countryToUpdate);
   };
+
   return {
     getCountries,
     deleteCountry,

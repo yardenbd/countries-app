@@ -10,7 +10,14 @@ export interface ICountry {
   flag: string;
   latitude: number;
   longitude: number;
+  description: string;
 }
+
+export type TableHeaders =
+  | keyof Pick<ICountry, "code" | "flag" | "name">
+  | "action";
+
+const t: TableHeaders[] = ["name", "code", "flag", "action"];
 
 export interface IResponse {
   rows: ICountry[];
@@ -23,3 +30,5 @@ export interface IPaginationState {
   pageIndex: number;
   total: number;
 }
+
+export type SortBy = [string, "ASC" | "DESC"] | [];

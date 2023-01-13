@@ -1,15 +1,19 @@
 import React, { useState } from "react";
+import { Button } from "../reuseableStyle";
 import { Container } from "./style";
 
 interface IFilterProps {
-  onClick: (countryFilterName: string) => void;
+  onClick: () => void;
   onReset: () => void;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  searchTerm: string;
 }
 export const Filter: React.FC<IFilterProps> = ({
   onClick,
   onReset,
+  searchTerm,
+  setSearchTerm,
 }): JSX.Element => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
   return (
     <Container>
       <input
@@ -17,15 +21,15 @@ export const Filter: React.FC<IFilterProps> = ({
         value={searchTerm}
         onChange={(ev) => setSearchTerm(ev.target.value)}
       />
-      <button onClick={() => onClick(searchTerm)}>Search</button>
-      <button
+      <Button onClick={onClick}>Search</Button>
+      <Button
         onClick={() => {
           onReset();
           setSearchTerm("");
         }}
       >
         Reset Search
-      </button>
+      </Button>
     </Container>
   );
 };

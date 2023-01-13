@@ -24,6 +24,21 @@ export const RowContainer = styled.div`
     display: inline-block;
     text-transform: capitalize;
   }
+  .header {
+    button {
+      background: transparent;
+      border: none;
+      height: 8px;
+      i {
+        color: white;
+      }
+      cursor: pointer;
+    }
+    margin-bottom: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
 `;
 
 export const TableRow = styled.div`

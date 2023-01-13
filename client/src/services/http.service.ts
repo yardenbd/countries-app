@@ -1,13 +1,14 @@
-import { IResponse, IPagination, ICountry } from "../types";
+import { IResponse, IPagination, ICountry, SortBy } from "../types";
 
 const URL = "http://localhost:3001/country";
 
 const getCountries = async (
   pagination: IPagination,
-  errorCallback: (isOk: boolean) => void
+  errorCallback: (isOk: boolean) => void,
+  sortBy: SortBy
 ) => {
   const { limit, offset } = pagination;
-  const fetchUrl = `${URL}?limit=${limit}&offset=${offset}`;
+  const fetchUrl = `${URL}?limit=${limit}&offset=${offset}&sortBy=${sortBy}`;
   const response = await fetch(fetchUrl);
 
   if (!response.ok) {
@@ -21,10 +22,11 @@ const getCountries = async (
 const getCountriesByName = async (
   pagination: IPagination,
   filterName: string,
-  errorCallback: (isOk: boolean) => void
+  errorCallback: (isOk: boolean) => void,
+  sortBy: SortBy
 ) => {
   const { limit, offset } = pagination;
-  const fetchUrl = `${URL}/${filterName}?limit=${limit}&offset=${offset}`;
+  const fetchUrl = `${URL}/${filterName}?limit=${limit}&offset=${offset}&sortBy=${sortBy}`;
   const response = await fetch(fetchUrl);
   if (!response.ok) {
     errorCallback(!response.ok);

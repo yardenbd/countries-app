@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { useCountries } from "../../hooks/useCountries";
-import { ICountry } from "../../types";
+import React from "react";
+import { ICountry, SortBy, TableHeaders } from "../../types";
 import { DynamicElement } from "../DynamicElement/DynamicElement";
 import { Container, RowContainer, TableHeader, TableRow } from "./style";
 
@@ -8,20 +7,36 @@ interface ITableProps {
   setCountryToEdit: React.Dispatch<React.SetStateAction<ICountry | null>>;
   countries: ICountry[];
   deleteCountry: (id: number) => void;
+  setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
 }
 
 export const Table: React.FC<ITableProps> = ({
   countries,
   setCountryToEdit,
   deleteCountry,
+  setSortBy,
 }): JSX.Element => {
-  const tableHeaders = Object.keys(countries[0] || {});
-  tableHeaders.push("action");
-  const tableHeadersToRender = tableHeaders.map((th) => (
-    <RowContainer key={th}>
-      <span className="table-header">{th}</span>
-    </RowContainer>
-  ));
+  const tableHeaders: TableHeaders[] = ["name", "code", "flag", "action"];
+
+  const tableHeadersToRender = tableHeaders.map((th) => {
+    const renderSortingButtons = (th === "name" || th === "code") && (
+      <div className="header">
+        <button onClick={() => setSortBy([th, "ASC"])}>
+          <i className="fa-solid fa-caret-up"></i>
+        </button>
+        <button onClick={() => setSortBy([th, "DESC"])}>
+          <i className="fa-solid fa-caret-down"></i>
+        </button>
+      </div>
+    );
+    return (
+      <RowContainer key={th}>
+        <span className="table-header">{th}</span>
+        {renderSortingButtons}
+      </RowContainer>
+    );
+  });
+
   const tableRowsToRender = countries.map((country) => (
     <TableRow key={country.id}>
       {tableHeaders.map((th) => {
