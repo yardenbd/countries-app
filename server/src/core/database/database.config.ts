@@ -7,4 +7,5 @@ export const dbConfig: SequelizeOptions = {
   username: process.env.DB_USERNAME,
   password: '',
   database: process.env.DB_NAME,
+  logging: false,
 };

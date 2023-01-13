@@ -31,4 +31,10 @@ export class Country extends Model<Country> {
     allowNull: false,
   })
   flag: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  description: string;
 }

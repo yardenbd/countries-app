@@ -5,4 +5,5 @@ export class UpdateCountryDto {
   flag?: string;
   longitude?: number;
   latitude?: number;
+  description?: string;
 }
