@@ -5,6 +5,7 @@ export const Container = styled.div`
   ${reuseableStyle}
   background-color: white;
   gap: 20px;
+  z-index: 1000;
   .header-section {
     display: flex;
     align-items: center;

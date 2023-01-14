@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Geographies, Geography } from "react-simple-maps";
 import { useCountries } from "../../hooks/useCountries";
 import { ICountry } from "../../types";
 import { CountryInformation } from "../CountryInformation/CountryInformation";
-import { CustomMarker } from "../CustomMarker/CustomMarker";
-import { StyledGeography } from "./style";
+import Globe, { GlobeProps, GlobeMethods } from "react-globe.gl";
+import { elementCreator } from "../../utils";
 const geoUrl =
   "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
 
@@ -14,7 +13,7 @@ export const Map: React.FC = (): JSX.Element => {
   );
   const { getCountries, countries } = useCountries();
   useEffect(() => {
-    getCountries({ limit: 10, offset: 0 });
+    getCountries({ limit: 200, offset: 0 });
   }, []);
 
   const renderCountryInformation = countryInformation && (
@@ -24,28 +23,28 @@ export const Map: React.FC = (): JSX.Element => {
     />
   );
 
-  const markersToRender = countries.map((country) => (
-    <CustomMarker
-      onSelect={() => setCountryInformation(country)}
-      key={country.id}
-      latitude={country.latitude}
-      longitude={country.longitude}
-      flag={country.flag}
-    />
-  ));
   return (
     <>
       {renderCountryInformation}
-      <StyledGeography>
-        <Geographies geography={geoUrl}>
-          {({ geographies }) =>
-            geographies.map((geo) => (
-              <Geography key={geo.rsmKey} geography={geo} />
-            ))
-          }
-        </Geographies>
-        {markersToRender}
-      </StyledGeography>
+      <Globe
+        width={window.innerWidth - 200}
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+        backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+        htmlElementsData={countries}
+        htmlLat={(d) => {
+          if ("latitude" in d && typeof d.latitude === "number") {
+            return d.latitude;
+          } else return 0;
+        }}
+        htmlLng={(d) => {
+          if ("longitude" in d && typeof d.longitude === "number") {
+            return d.longitude;
+          } else return 0;
+        }}
+        htmlElement={(d) => elementCreator(d, setCountryInformation)}
+      />
     </>
   );
 };
+
+const t: HTMLElement | null = document.getElementById("");
