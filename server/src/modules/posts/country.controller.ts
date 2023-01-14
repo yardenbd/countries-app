@@ -16,23 +16,27 @@ import { UpdateCountryDto } from './dto/update-country.dto';
 export class PostsController {
   constructor(private readonly countryService: CountryService) {}
 
-  @Get()
-  findAll(@Query() query: IQueryParams) {
-    const { limit, offset, sortBy } = query;
-    const sortCriteria: OrderItem = sortBy && (sortBy.split(',') as OrderItem);
+  @Get('/all')
+  getAll() {
+    return this.countryService.getAll();
+  }
 
-    return this.countryService.findAll(
-      { limit: +limit, offset: +offset },
+  @Get()
+  getAllByPage(@Query() query: IQueryParams) {
+    const { limit, pageIndex, sortBy } = query;
+    const sortCriteria: OrderItem = sortBy && (sortBy.split(',') as OrderItem);
+    return this.countryService.getAllByPage(
+      { limit: +limit, pageIndex: +pageIndex },
       sortCriteria,
     );
   }
 
   @Get('/:name')
   findBy(@Query() query: IQueryParams, @Param() param: { name: string }) {
-    const { limit, offset, sortBy } = query;
+    const { limit, pageIndex, sortBy } = query;
     const sortCriteria: OrderItem = sortBy && (sortBy.split(',') as OrderItem);
     return this.countryService.findBy(
-      { limit: +limit, offset: +offset },
+      { limit: +limit, pageIndex: +pageIndex },
       param.name,
       sortCriteria,
     );

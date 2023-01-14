@@ -2,7 +2,7 @@ import { Request } from 'express';
 
 export interface IPagination {
   limit: number;
-  offset: number;
+  pageIndex: number;
 }
 export type SortBy = [string, 'ASC' | 'DESC'] | [];
 

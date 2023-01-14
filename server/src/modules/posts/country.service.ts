@@ -21,12 +21,16 @@ export class CountryService {
     private readonly countryRepository: typeof Country,
   ) {}
 
-  findAll(pagination: IPagination, sortBy?: OrderItem) {
-    const { limit = 10, offset = 0 } = pagination;
+  getAll() {
+    return this.countryRepository.findAll();
+  }
+
+  getAllByPage(pagination: IPagination, sortBy?: OrderItem) {
+    const { limit = 15, pageIndex = 1 } = pagination;
     const setOrderBy = sortBy && { order: [sortBy] };
     return this.countryRepository.findAndCountAll<Country>({
       limit,
-      offset,
+      offset: pageIndex * limit,
       attributes,
       ...setOrderBy,
     });
@@ -37,11 +41,11 @@ export class CountryService {
     countryName: string,
     sortBy?: OrderItem,
   ) {
-    const { limit = 10, offset = 0 } = pagination;
+    const { limit = 15, pageIndex = 1 } = pagination;
     const setOrderBy = sortBy && { order: [sortBy] };
     return this.countryRepository.findAndCountAll<Country>({
       limit,
-      offset,
+      offset: pageIndex * limit,
       attributes,
       where: {
         name: { [Op.startsWith]: countryName },
