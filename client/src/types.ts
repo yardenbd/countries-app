@@ -1,6 +1,6 @@
 export interface IPagination {
   limit: number;
-  offset: number;
+  pageIndex: number;
 }
 
 export interface ICountry {
@@ -26,7 +26,6 @@ export interface IResponse {
 
 export interface IPaginationState {
   limit: number;
-  offset: number;
   pageIndex: number;
   total: number;
 }

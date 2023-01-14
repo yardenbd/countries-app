@@ -7,7 +7,7 @@ import { PaginationWrapper, PagintionItem } from "./style";
 interface IPaginationProps {
   pagination: IPaginationState;
   setPagination: React.Dispatch<React.SetStateAction<IPaginationState>>;
-  onPageClick: (pagination: { limit: number; offset: number }) => void;
+  onPageClick: (pagination: { limit: number; pageIndex: number }) => void;
 }
 
 export const Pagination: React.FC<IPaginationProps> = ({
@@ -27,15 +27,13 @@ export const Pagination: React.FC<IPaginationProps> = ({
   const handlePageClick = (desiredPageIndex: number) => {
     if (desiredPageIndex < 0 || desiredPageIndex > Math.floor(total / limit))
       return;
-    const offset = desiredPageIndex * limit;
     setPagination((prevState) => {
-      return { ...prevState, offset, pageIndex: desiredPageIndex };
+      return { ...prevState, pageIndex: desiredPageIndex };
     });
 
-    const lastPageIndex = offset === total;
-    onPageClick({ limit, offset: lastPageIndex ? offset - 25 : offset });
+    onPageClick({ limit, pageIndex: desiredPageIndex });
   };
-
+  console.log("paginationRange", paginationRange);
   const paginationItemToRender = paginationRange?.map((page) => {
     if (typeof page === "string") {
       return (
@@ -54,23 +52,26 @@ export const Pagination: React.FC<IPaginationProps> = ({
         </PagintionItem>
       );
   });
-  paginationItemToRender?.unshift(
-    <PagintionItem
-      onClick={() => handlePageClick(pagination.pageIndex - 1)}
-      key={"previous"}
-    >
-      Previous
-    </PagintionItem>
-  );
-
-  paginationItemToRender?.push(
-    <PagintionItem
-      onClick={() => handlePageClick(pagination.pageIndex + 1)}
-      key={"next"}
-    >
-      Next
-    </PagintionItem>
-  );
+  paginationRange &&
+    paginationRange?.length > 0 &&
+    paginationItemToRender?.unshift(
+      <PagintionItem
+        onClick={() => handlePageClick(pagination.pageIndex - 1)}
+        key={"previous"}
+      >
+        Previous
+      </PagintionItem>
+    );
+  paginationRange &&
+    paginationRange?.length > 0 &&
+    paginationItemToRender?.push(
+      <PagintionItem
+        onClick={() => handlePageClick(pagination.pageIndex + 1)}
+        key={"next"}
+      >
+        Next
+      </PagintionItem>
+    );
 
   return <PaginationWrapper>{paginationItemToRender}</PaginationWrapper>;
 };

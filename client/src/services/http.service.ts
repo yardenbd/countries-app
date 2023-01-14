@@ -2,13 +2,24 @@ import { IResponse, IPagination, ICountry, SortBy } from "../types";
 
 const URL = "http://localhost:3001/country";
 
-const getCountries = async (
+const getAllCountries = async (errorCallback: (isOk: boolean) => void) => {
+  const response = await fetch(`${URL}/all`);
+
+  if (!response.ok) {
+    errorCallback(!response.ok);
+  }
+
+  const parsedResponse = (await response.json()) as IResponse["rows"];
+  return parsedResponse;
+};
+
+const getAllByPage = async (
   pagination: IPagination,
   errorCallback: (isOk: boolean) => void,
   sortBy: SortBy
 ) => {
-  const { limit, offset } = pagination;
-  const fetchUrl = `${URL}?limit=${limit}&offset=${offset}&sortBy=${sortBy}`;
+  const { limit, pageIndex } = pagination;
+  const fetchUrl = `${URL}?limit=${limit}&pageIndex=${pageIndex}&sortBy=${sortBy}`;
   const response = await fetch(fetchUrl);
 
   if (!response.ok) {
@@ -19,14 +30,14 @@ const getCountries = async (
   return parsedResponse;
 };
 
-const getCountriesByName = async (
+const getAllCountriesByName = async (
   pagination: IPagination,
   filterName: string,
   errorCallback: (isOk: boolean) => void,
   sortBy: SortBy
 ) => {
-  const { limit, offset } = pagination;
-  const fetchUrl = `${URL}/${filterName}?limit=${limit}&offset=${offset}&sortBy=${sortBy}`;
+  const { limit, pageIndex } = pagination;
+  const fetchUrl = `${URL}/${filterName}?limit=${limit}&pageIndex=${pageIndex}&sortBy=${sortBy}`;
   const response = await fetch(fetchUrl);
   if (!response.ok) {
     errorCallback(!response.ok);
@@ -61,4 +72,10 @@ const updateCountry = async (countryToEdit: Partial<ICountry>) => {
   return parsedResponse;
 };
 
-export { getCountries, getCountriesByName, deleteCountry, updateCountry };
+export {
+  getAllCountries,
+  getAllByPage,
+  getAllCountriesByName,
+  deleteCountry,
+  updateCountry,
+};

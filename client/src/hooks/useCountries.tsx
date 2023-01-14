@@ -5,8 +5,16 @@ export const useCountries = () => {
   const [countries, setCountries] = useState<ICountry[]>([]);
   const [error, setError] = useState<boolean>(false);
 
-  const getCountries = async (pagination: IPagination, sortBy?: SortBy) => {
-    const response = await countryService.getCountries(
+  const getAllCountries = async () => {
+    const response = await countryService.getAllCountries(setError);
+    setCountries(response);
+  };
+
+  const getAllCountriesByPage = async (
+    pagination: IPagination,
+    sortBy?: SortBy
+  ) => {
+    const response = await countryService.getAllByPage(
       pagination,
       setError,
       sortBy || []
@@ -14,12 +22,12 @@ export const useCountries = () => {
     setCountries(response.rows);
     return response.count;
   };
-  const getCountriesByName = async (
+  const getAllCountriesByName = async (
     pagination: IPagination,
     filterName: string,
     sortBy?: SortBy
   ) => {
-    const response = await countryService.getCountriesByName(
+    const response = await countryService.getAllCountriesByName(
       pagination,
       filterName,
       setError,
@@ -37,11 +45,12 @@ export const useCountries = () => {
   };
 
   return {
-    getCountries,
+    getAllCountriesByPage,
     deleteCountry,
+    getAllCountries,
     countries,
     error,
-    getCountriesByName,
+    getAllCountriesByName,
     updateCountry,
   };
 };

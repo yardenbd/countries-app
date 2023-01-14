@@ -13,18 +13,24 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [pagination, setPagination] = useState<IPaginationState>({
     limit: 15,
-    offset: 0,
     pageIndex: 0,
     total: 0,
   });
 
   const {
-    getCountries,
+    getAllCountriesByPage,
     countries,
-    getCountriesByName,
+    getAllCountriesByName,
     deleteCountry,
     updateCountry,
   } = useCountries();
+
+  const getAllCountries = async () => {
+    const count = await getAllCountriesByPage(pagination, sortBy);
+    setPagination((prevState) => {
+      return { ...prevState, total: count };
+    });
+  };
 
   const handleSubmit = async (
     ev: FormEvent<HTMLFormElement>,
@@ -32,29 +38,21 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
   ) => {
     ev.preventDefault();
     await updateCountry(editedCountry);
-    await getCountries({ limit: pagination.limit, offset: pagination.offset });
-  };
-
-  const getAllCountries = () => {
-    getCountries(pagination, sortBy).then((count) =>
-      setPagination((prevState) => {
-        return { ...prevState, total: count };
-      })
-    );
+    getAllCountries();
   };
 
   const resetPagination = (count: number) => {
-    setPagination({ limit: 15, offset: 0, pageIndex: 1, total: count });
+    setPagination({ limit: 15, pageIndex: 0, total: count });
   };
 
   const handleReset = async () => {
-    const count = await getCountries({ limit: 15, offset: 0 });
+    const count = await getAllCountriesByPage({ limit: 15, pageIndex: 0 });
     resetPagination(count);
   };
 
   const handleSearchCountry = async () => {
-    const count = await getCountriesByName(
-      { limit: 15, offset: 0 },
+    const count = await getAllCountriesByName(
+      { limit: 15, pageIndex: 0 },
       searchTerm,
       sortBy
     );
@@ -63,7 +61,10 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
 
   const handleDeleteCountry = async (id: number) => {
     await deleteCountry(id);
-    await getCountries({ limit: pagination.limit, offset: pagination.offset });
+    await getAllCountriesByPage({
+      limit: pagination.limit,
+      pageIndex: pagination.pageIndex,
+    });
   };
 
   const renderEditForm = countryToEdit && (
@@ -98,7 +99,7 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
       />
       {renderEditForm}
       <Pagination
-        onPageClick={(pagination) => getCountries(pagination, sortBy)}
+        onPageClick={(pagination) => getAllCountriesByPage(pagination, sortBy)}
         setPagination={setPagination}
         pagination={pagination}
       />

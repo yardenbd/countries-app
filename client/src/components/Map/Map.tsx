@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCountries } from "../../hooks/useCountries";
 import { ICountry } from "../../types";
 import { CountryInformation } from "../CountryInformation/CountryInformation";
-import Globe, { GlobeProps, GlobeMethods } from "react-globe.gl";
+import Globe from "react-globe.gl";
 import { elementCreator } from "../../utils";
 const geoUrl =
   "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
@@ -11,9 +11,9 @@ export const Map: React.FC = (): JSX.Element => {
   const [countryInformation, setCountryInformation] = useState<ICountry | null>(
     null
   );
-  const { getCountries, countries } = useCountries();
+  const { getAllCountries, countries } = useCountries();
   useEffect(() => {
-    getCountries({ limit: 200, offset: 0 });
+    getAllCountries();
   }, []);
 
   const renderCountryInformation = countryInformation && (
