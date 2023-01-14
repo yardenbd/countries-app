@@ -1,7 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 
 import { SEQUELIZE } from '../constants';
-import { dbConfig } from './database.config';
 import { Country } from '../../modules/posts/country.entity';
 import { Dialect } from 'sequelize/types';
 
@@ -16,6 +15,8 @@ export const databaseProviders = [
         username: process.env.DB_USERNAME,
         password: '',
         database: process.env.DB_NAME,
+        logging: false,
+        dialectOptions: { decimalNumbers: true },
       });
       sequelize.addModels([Country]);
       return sequelize;
