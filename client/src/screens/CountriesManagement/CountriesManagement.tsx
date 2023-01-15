@@ -94,7 +94,7 @@ export const CountriesManagement: React.FC = (): JSX.Element => {
       <Table
         setSortBy={setSortBy}
         deleteCountry={handleDeleteCountry}
-        countries={countries}
+        countries={countries || []}
         setCountryToEdit={setCountryToEdit}
       />
       {renderEditForm}
