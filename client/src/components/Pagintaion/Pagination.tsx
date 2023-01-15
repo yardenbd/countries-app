@@ -33,7 +33,7 @@ export const Pagination: React.FC<IPaginationProps> = ({
 
     onPageClick({ limit, pageIndex: desiredPageIndex });
   };
-  console.log("paginationRange", paginationRange);
+
   const paginationItemToRender = paginationRange?.map((page) => {
     if (typeof page === "string") {
       return (
@@ -52,8 +52,10 @@ export const Pagination: React.FC<IPaginationProps> = ({
         </PagintionItem>
       );
   });
-  paginationRange &&
-    paginationRange?.length > 0 &&
+
+  const shouldAddButtonToPagintionRnage =
+    paginationRange && paginationRange?.length > 0;
+  shouldAddButtonToPagintionRnage &&
     paginationItemToRender?.unshift(
       <PagintionItem
         onClick={() => handlePageClick(pagination.pageIndex - 1)}
@@ -62,8 +64,7 @@ export const Pagination: React.FC<IPaginationProps> = ({
         Previous
       </PagintionItem>
     );
-  paginationRange &&
-    paginationRange?.length > 0 &&
+  shouldAddButtonToPagintionRnage &&
     paginationItemToRender?.push(
       <PagintionItem
         onClick={() => handlePageClick(pagination.pageIndex + 1)}

@@ -8,7 +8,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         <h1>Menu</h1>
       </div>
       <NavLink
-        to={"countries"}
+        to={"/"}
         className={({ isActive }) => (isActive ? "active" : "")}
       >
         Countries

@@ -9,7 +9,7 @@ export const AppRoutes: React.FC = (): JSX.Element => {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/countries" element={<CountriesManagement />} />
+        <Route path="/" element={<CountriesManagement />} />
         <Route path="/world-map" element={<WorldMap />} />
       </Routes>
     </Router>
