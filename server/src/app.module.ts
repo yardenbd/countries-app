@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './core/database/database.module';
-import { CountryModule } from './modules/posts/country.module';
+import { CountryModule } from './modules/countries/country.module';
 
 @Module({
   imports: [

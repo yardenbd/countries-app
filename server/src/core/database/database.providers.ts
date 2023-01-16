@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 
 import { SEQUELIZE } from '../constants';
-import { Country } from '../../modules/posts/country.entity';
+import { Country } from '../../modules/countries/country.entity';
 import { Dialect } from 'sequelize/types';
 
 export const databaseProviders = [
